@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shape Detection App</title>
+    <title>Shape Detection App with Text Recognition</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,6 +42,22 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .shape-item {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .shape-type {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .shape-text {
+            margin-top: 5px;
+            color: #34495e;
+            font-style: italic;
+        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -54,29 +70,16 @@
         button:hover {
             background-color: #45a049;
         }
-        input[type="file"] {
-            margin: 10px 0;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 8px;
-            margin: 4px 0;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
-    <h1>Shape Detection App</h1>
+    <h1>Shape Detection with Text Recognition</h1>
     
     <div class="upload-container">
         <h2>Upload Image</h2>
         <input type="file" id="fileInput" accept="image/*">
         <br>
-        <button onclick="uploadFile()">Upload and Detect Shapes</button>
+        <button onclick="uploadFile()">Upload and Analyze</button>
     </div>
     
     <div id="progressBar">
@@ -101,7 +104,6 @@
             const formData = new FormData();
             formData.append('file', file);
             
-            // Show and reset progress bar
             progressBar.style.display = 'block';
             progressDiv.style.width = '0%';
             resultsDiv.style.display = 'none';
@@ -119,18 +121,24 @@
                     throw new Error(data.error);
                 }
                 
-                // Display results
                 resultsDiv.style.display = 'block';
-                resultsDiv.innerHTML = '<h2>Detected Shapes:</h2>' +
-                    '<ul>' +
-                    data.shapes.map(shape => `<li>${shape}</li>`).join('') +
-                    '</ul>';
+                let html = '<h2>Analysis Results:</h2>';
+                
+                data.shapes.forEach(shape => {
+                    html += `
+                        <div class="shape-item">
+                            <div class="shape-type">${shape.type}</div>
+                            <div class="shape-text">Text: ${shape.text}</div>
+                        </div>
+                    `;
+                });
+                
+                resultsDiv.innerHTML = html;
             })
             .catch(error => {
                 alert('Error: ' + error.message);
             })
             .finally(() => {
-                // Hide progress bar after a short delay
                 setTimeout(() => {
                     progressBar.style.display = 'none';
                 }, 1000);
