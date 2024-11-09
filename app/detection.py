@@ -4,6 +4,7 @@ import pytesseract
 from PIL import Image
 import math
 
+
 class ShapeTextDetector:
     def __init__(self):
         self.shapes = []

@@ -9,6 +9,7 @@ from PIL import Image
 import traceback
 import sys
 
+
 detector = ShapeTextDetector()
 
 def allowed_file(filename):
