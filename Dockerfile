@@ -18,19 +18,13 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
-COPY . .
+# Copy application files
+COPY app.py .
+COPY templates templates/
 
-# Create directories if they don't exist and set permissions
-RUN mkdir -p app/static/uploads app/static/processed \
-    && chmod 777 app/static/uploads \
-    && chmod 777 app/static/processed
+# Create uploads directory
+RUN mkdir uploads
 
-EXPOSE 5000
+# Run the application
+CMD ["python", "app.py"]
 
-# Set environment variable for Flask
-ENV FLASK_ENV=development
-ENV FLASK_APP=run.py
-ENV PYTHONUNBUFFERED=1
-
-CMD ["python", "run.py"]
